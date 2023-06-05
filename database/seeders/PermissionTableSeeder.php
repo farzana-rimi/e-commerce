@@ -13,15 +13,15 @@ class PermissionTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::insert([
-           ['name'=>'list','status'=>'active'],
-           ['name'=>'create','status'=>'active'],
-           ['name'=>'store','status'=>'active'],
-           ['name'=>'edit','status'=>'active'],
-           ['name'=>'delete','status'=>'active'],
-           ['name'=>'view','status'=>'active'],
+        Permission::create([
+
+            'name'=>'edit',
+            'status'=>'active'
+
+        ]);
+           
            
             
-        ]);
+        
     }
 }
