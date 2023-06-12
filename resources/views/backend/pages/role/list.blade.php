@@ -8,6 +8,8 @@
       <th scope="col">ID</th>
       <th scope="col">Name</th>
       <th scope="col">Status</th>
+      
+
       <th scope="col">Action</th>
   
     </tr>
@@ -23,7 +25,7 @@
         <a href="{{route('role.view',$data->id)}}" class="btn btn-info">View</a>
         <a href="{{route('role.edit',$data->id)}}" class="btn btn-success">Edit</a>
         <a href="{{route('role.delete',$data->id)}}" class="btn btn-danger">Delete</a>
-        <a href="" class="btn btn-info">Assign Permission</a>
+        <a href="{{route('role.permission',$data->id)}}" class="btn btn-info">Assign</a>
       </td>
     </tr>
 @endforeach
