@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Assign;
 use App\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
@@ -63,7 +64,7 @@ class RoleController extends Controller
         return redirect()->back();
     }
 
-    public function rolepermission($roleid){
+    public function assign($roleid){
 
         $role=Role::with('assign')->find($roleid);
         $permissions=Permission::all();
@@ -75,16 +76,40 @@ class RoleController extends Controller
     public function assignstore(Request $request,$roleid)
     {
 
-        foreach($request->selected_permissions as $permission){
+        
+        try{
 
-            Assign::create([
+            DB::beginTransaction();
+            $getPermission=Assign::where('role_id',$roleid)->get();
+
+            if($getPermission->count()>0)
+            {
+                $getPermission->each()->delete();
+            }
+
+            if(!is_null($request->selected_permissions)) 
+            {
+                foreach($request->selected_permissions as $permission)
+                {
+
+                Assign::create([
                 'role_id'=>$roleid,
                 'permission_id'=>$permission
 
-            ]);
-        }
+                    ]);
+                }
+            }
+            DB::commit();
+            return redirect()->route('role.list');
 
-        return redirect()->route('role.list');
+
+        }catch(\Throwable $exception)
+        { 
+            DB::rollBack();
+            toastr()->error('Something went worng.');
+            return redirect()->back();
+
+        }
     }
 }
 

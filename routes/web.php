@@ -99,7 +99,7 @@ Route::group(['prefix'=>'admin'],function(){
             Route::get('/role/delete/{id}',[RoleController::class,'delete'])->name('role.delete');
             Route::get('/role/edit/{id}',[RoleController::class,'edit'])->name('role.edit');
             Route::put('/role/update/{id}',[RoleController::class,'update'])->name('role.update');
-            Route::get('/role/permission/{roleid}',[RoleController::class,'rolepermission'])->name('role.permission');
+            Route::get('/role/permission/{roleid}',[RoleController::class,'assign'])->name('role.permission');
             Route::post('/assign/store/{roleid}',[RoleController::class,'assignstore'])->name('assign.store'); 
             //for permission
            Route::get('/permission/list',[PermissionController::class,'list'])->name('permission.list');
