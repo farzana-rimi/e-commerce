@@ -185,8 +185,13 @@
                     @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Enter Your Name:</label>
-                        <input required type="text" name="customer_name" class="form-control" placeholder=" name">
+                        <label for="">Enter first Name:</label>
+                        <input required type="text" name="first_name" class="form-control" placeholder=" first_name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Enter last Name:</label>
+                        <input required type="text" name="last_name" class="form-control" placeholder=" last_name">
                     </div>
                         <div class="form-group">
                             <label for="">Enter Your email:</label>

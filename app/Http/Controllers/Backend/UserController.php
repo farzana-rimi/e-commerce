@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -43,7 +44,7 @@ class UserController extends Controller
             'contact'=>$request-> contact,
             'address'=>$request->address,
             
-            'email'=>$request-> email,
+            'email'=>$request->email,
             
             'status'=>$request->status,
             'type'=>'admin',

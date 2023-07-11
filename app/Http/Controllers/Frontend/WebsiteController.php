@@ -30,7 +30,8 @@ class WebsiteController extends Controller
     public function regstore(Request $request)
     {
       $validate=Validator::make($request->all(),[
-         'customer_name'=>'required',
+         'first_name'=>'required',
+         'last_name'=>'required',
          'customer_email'=>'required|unique:users,email',
          'password'=>'required',
          'contact'=>'required',
@@ -46,7 +47,8 @@ class WebsiteController extends Controller
       }
 
       User::create([
-          'name'=>$request->customer_name,
+          'first_name'=>$request->first_name,
+          'last_name'=>$request->last_name,
           'email'=>$request->customer_email,
           'password'=>bcrypt($request->password),
           'contact'=>$request->contact,

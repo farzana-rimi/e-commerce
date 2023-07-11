@@ -7,7 +7,7 @@
   <thead>
     <tr>
       <th scope="col">ID</th>
-      <th scope="col">Name</th>
+      <th scope="col">Full Name</th>
       <th scope="col">Status</th>
         <th scope="col">Email</th>
         <th scope="col">Contact</th>
@@ -22,7 +22,7 @@
 
     <tr>
       <th scope="row">{{$key+1}}</th>
-      <td>{{$data->name}}</td>
+      <td>{{$data->full_name}}</td>
       
       <td>{{$data->status}}</td>
       

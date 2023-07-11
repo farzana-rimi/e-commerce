@@ -22,7 +22,7 @@
 
     <tr>
       <th scope="row">{{$key+1}}</th>
-      <td>{{$data->name}}</td>
+      <td>{{$data->full_name}}</td>
       
       <td>{{$data->status}}</td>
       

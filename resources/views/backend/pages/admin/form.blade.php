@@ -7,9 +7,16 @@
            <div class="col-md-2"></div>
            <div class="col-md-6">
                <div>
-               <label for="">Enter Admin Name:</label>
-               <input name="admin_name" placeholder="Enter admin name" type="text" class="form-control">
+               <label for="">Enter First Name:</label>
+               <input name="first_name" placeholder="Enter first name" type="text" class="form-control">
                </div>
+              
+              
+               <div>
+                <label for="">Enter Last Name:</label>
+               <input name="last_name" placeholder="Enter last name" type="text" class="form-control">
+               </div>
+               
                
 
                
