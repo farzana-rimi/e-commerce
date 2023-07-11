@@ -4,8 +4,14 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Mail\EmailVerification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+
+
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
@@ -25,7 +31,7 @@ class WebsiteController extends Controller
     {
       $validate=Validator::make($request->all(),[
          'customer_name'=>'required',
-         'customer_email'=>'required',
+         'customer_email'=>'required|unique:users,email',
          'password'=>'required',
          'contact'=>'required',
          'address'=>'required'
@@ -35,7 +41,7 @@ class WebsiteController extends Controller
 
       if($validate->fails())
       {
-          toastr()->error($validate->getMessageBag());
+          toastr()->error('Something went wrong.');
           return redirect()->back();
       }
 
@@ -58,7 +64,7 @@ class WebsiteController extends Controller
     {
         $validate=Validator::make($request->all(),[
            'email'=>'required',
-           'password'=>'required',
+           'password'=>'required'
         ]);
 
         if($validate->fails())
@@ -68,17 +74,61 @@ class WebsiteController extends Controller
         }
 
         $credentials=$request->except('_token');
+
        if(auth()->attempt($credentials))
        {
-           toastr()->success('Login success');
-           return redirect()->back();
-       }
-        toastr()->error('Login failed');
+        
+            if(auth()->user()->email_varified_at!=null)
+                {
+                    toastr()->success('Login success');
+                    return redirect()->route('website')();
+                }
+                $user_id=auth()->user()->id;
+
+                Auth::logout();
+
+                toastr()->warning('Email not verified');
+                return redirect()->back()->with('userId',$user_id);
+        }
+        toastr()->error('Invalid Credentials');
         return redirect()->back();
     }
 
 
- public function weblogout(){
+
+public function emailVerify($id){
+    $user=User::find($id);
+    $link=route('email.verify.link',$user->id);
+
+    Mail::to($user->email)->send(new EmailVerification($link));
+
+     $user->update([
+        'expired_at'=>Carbon::now()->addMinute(5)
+     ]);
+    toastr()->success('Verification link sent to your email.');
+    return redirect()->back();
+}
+
+public function emailverifylink($id){
+    $user=User::find($id);
+    if($user->expired_at > Carbon::now())
+    {
+        $user->update([
+            'email_verified_at'=>now()
+        ]);
+
+        toastr()->success('Email verification success. Please login.');
+        return redirect()->route('website');
+    }
+
+    toastr()->warning('Link expired');
+    return redirect()->route('website');
+
+}
+
+
+
+public function weblogout(){
     auth()->logout();
     toastr()->warning('Loged out');
     return redirect()->back();

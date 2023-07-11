@@ -22,7 +22,8 @@ Route::post('/reg-store',[WebsiteController::class,'regstore'])->name('regstore'
 Route::post('/web-login',[WebsiteController::class,'weblogin'])->name('weblogin');
 Route::get('/weblogout',[WebsiteController::class,'weblogout'])->name('weblogout');
 Route::get('/product-search',[WebsiteController::class,'productsearch'])->name('product.search');
-
+Route::get('/email-verify/{id}',[WebsiteController::class,'emailVerify'])->name('email.verify');
+Route::get('/email-verify-link/{id}',[WebsiteController::class,'emailverifylink'])->name('email.verify.link');
 
 
 
@@ -103,6 +104,7 @@ Route::group(['prefix'=>'admin'],function(){
             Route::post('/assign/store/{roleid}',[RoleController::class,'assignstore'])->name('assign.store'); 
             //for permission
            Route::get('/permission/list',[PermissionController::class,'list'])->name('permission.list');
+           Route::get('/get/permissions', [PermissionController::class, 'getpermission'])->name('get.permission');
            Route::get('/permission/view/{id}',[PermissionController::class,'view'])->name('permission.view');
            Route::get('/permission/edit/{id}',[PermissionController::class,'edit'])->name('permission.edit');
            Route::put('/permission/update/{id}',[PermissionController::class,'update'])->name('permission.update');

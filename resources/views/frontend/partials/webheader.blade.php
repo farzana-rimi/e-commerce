@@ -40,6 +40,16 @@
 
 
 <div class="col-lg-2 col-md-3 col-12">
+
+@if(session()->has('userId'))
+    <p class="badge badge-danger">
+        <span>Please verify your email.</span>
+        <br>
+        <br>
+        <a class="btn btn-info" href="{{route('email.verify',session()->get('userId'))}}">Verify now</a>
+    </p>
+@endif
+
 <div class="right-bar">
 
 
@@ -218,7 +228,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{route('weblogin')}}" method="post">
+                <form action="{{route('weblogin')}}" method='post'>
+                    
                     @csrf
                     <div class="modal-body mb-5">
 

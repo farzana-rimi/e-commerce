@@ -19,8 +19,27 @@ class UserController extends Controller
 
     public function adminstore(Request $request){
 
+        $validate=Validator::make($request->all(),[
+            'first_name'=>'required',
+            'last_name'=>'required',
+            'contact'=>'required',
+            'address'=>'required',
+            'status'=>'required',
+            
+            
+            'email'=>'required',
+            'password'=>'required'
+        ]);
+
+        if($validate->fails()){
+
+            toastr()->error('Validation failed.');
+            return redirect()->back();
+        }
+
         User::create([
-            'name'=>$request-> admin_name,
+            'first_name'=>$request-> first_name,
+            'last_name'=>$request-> last_name,
             'contact'=>$request-> contact,
             'address'=>$request->address,
             
@@ -32,6 +51,8 @@ class UserController extends Controller
             'password'=>bcrypt($request->password)
 
         ]);
+
+        toastr()->success('Admin created successfully.');
 
         return redirect()->route('admin.list');
         
