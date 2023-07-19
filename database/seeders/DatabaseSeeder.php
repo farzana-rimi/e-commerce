@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+use App\Models\User;
+
 
 
 class DatabaseSeeder extends Seeder
@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-      $this->call(UserTableSeeder::class);
-    
+      //$this->call(UserTableSeeder::class);
+      User::factory(1000)->create();
       
     }
 

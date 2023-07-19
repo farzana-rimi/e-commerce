@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
+
 class UserTableSeeder extends Seeder
 {
     /**
@@ -13,7 +14,7 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        
+       
         User::create([
             'first_name'=>'Super',
             'last_name'=>'Admin',
