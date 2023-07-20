@@ -6,12 +6,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
     public function adminlist(){
+
+        if (Cache::has('users')){
+           $admins=Cache::get('users');
+           $msg="data from cache";
+        }else{
         $admins=User::where('type','=','admin')->get();
-        return view ('backend.pages.admin.list',compact('admins'));
+       Cache::put('users',$admins);
+       $msg='data from database';
+        }
+        
+        return view ('backend.pages.admin.list',compact('admins','msg'));
     }
     public function adminform(){
         

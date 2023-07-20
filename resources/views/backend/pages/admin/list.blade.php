@@ -3,7 +3,8 @@
 
 
 <a href="{{route('admin.form')}}" class='btn btn-primary my-3'>Add admin</a>
-    <table class="table">
+<h1>{{$msg}}</h1>    
+<table class="table">
   <thead>
     <tr>
       <th scope="col">ID</th>
