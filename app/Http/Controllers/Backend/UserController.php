@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
@@ -21,7 +22,7 @@ class UserController extends Controller
        $msg='data from database';
         }
         
-        return view ('backend.pages.admin.list',compact('admins','msg'));
+        return view('backend.pages.admin.list',compact('admins','msg'));
     }
     public function adminform(){
         
@@ -30,38 +31,45 @@ class UserController extends Controller
 
     public function adminstore(Request $request){
 
+        Log::debug('Starting user store');
+
         $validate=Validator::make($request->all(),[
             'first_name'=>'required',
             'last_name'=>'required',
             'contact'=>'required',
             'address'=>'required',
             'status'=>'required',
-            
-            
             'email'=>'required',
             'password'=>'required'
         ]);
+            
+            
 
         if($validate->fails()){
+
+            Log::debug('Validation failed.'.json_encode($validate->getMessageBag(),true));
 
             toastr()->error('Validation failed.');
             return redirect()->back();
         }
 
-        User::create([
+
+        Log::debug('Validation pass.');
+        
+       $user=User::create([
             'first_name'=>$request-> first_name,
             'last_name'=>$request-> last_name,
             'contact'=>$request-> contact,
             'address'=>$request->address,
-            
             'email'=>$request->email,
-            
             'status'=>$request->status,
             'type'=>'admin',
-            
             'password'=>bcrypt($request->password)
-
         ]);
+            
+        Log::debug('User store success. Name is:'.$user->first_name);    
+            
+
 
         toastr()->success('Admin created successfully.');
 
