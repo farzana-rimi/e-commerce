@@ -41,6 +41,9 @@
 
 <div class="col-lg-2 col-md-3 col-12">
 
+
+
+
 @if(session()->has('userId'))
     <p class="badge badge-danger">
         <span>Please verify your email.</span>
@@ -110,7 +113,7 @@
 <div class="navbar-collapse">
 <div class="nav-inner">
 <ul class="nav main-menu menu navbar-nav">
-<li class="active"><a href="#">Home</a></li>
+<li class="active"><a href="{{route('website')}}">Home</a></li>
 
 
 
@@ -129,6 +132,9 @@
 
 @endauth
 <li><a href="#">+8801620163363</a></li>
+<li><a href="{{route('cart.view')}}">Cart ( {{session()->has('cart')?count(session()->get('cart')):0}} items)</a>   </li>
+
+
 </ul>
 </div>
 </div>

@@ -76,7 +76,12 @@
                                 <div class="product-price">
                                     <span class="old"></span>
                                     <span>{{$data->price}} BDT</span>
-            
+                                
+
+                                </div>
+                                
+                                <div> 
+                                    <a class="btn btn-success"  title="Add to cart" href="{{route('add.to.cart',$data->id)}}">Add to cart</a>
                                 </div>
 
                             </div>

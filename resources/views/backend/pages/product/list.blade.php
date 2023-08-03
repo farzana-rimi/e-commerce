@@ -30,9 +30,9 @@
       <td>{{$data->status}}</td>
       <td>{{$data->price}}</td>
       <td>{{$data->description}}</td>
-      <td></td>
-      <td>{{$data->category->name}}</td>
-      <td>{{$data->vendor->name}}</td>
+      <td>{{$data->brand?->name}}</td>
+      <td>{{$data->category?->name}}</td>
+      <td>{{$data->vendor?->name}}</td>
       <td>
         <a href="{{route('product.view',$data->id)}}" class="btn btn-info">View</a>
         <a href="{{route('product.delete',$data->id)}}" class="btn btn-danger">Delete</a>

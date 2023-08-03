@@ -22,6 +22,12 @@
                                 <div class="sb-nav-link-icon"><i class="fa-light fa-location-dot"></i></div>
                                 Product
                             </a>
+
+                            <a class="nav-link" href="{{route('brand.list')}}">
+                                <div class="sb-nav-link-icon"><i class="fa-light fa-location-dot"></i></div>
+                                Brand
+                            </a>
+
                             <a class="nav-link" href="">
                                 <div class="sb-nav-link-icon"><i class="fa-light fa-location-dot"></i></div>
                                 Cart

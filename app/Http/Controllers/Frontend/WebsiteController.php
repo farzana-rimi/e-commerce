@@ -146,4 +146,59 @@ public function weblogout(){
     
  }
 
+ public function addtocart($id){
+
+    $cart=session()->get('cart');
+    $product=Product::find($id);
+    if(empty($cart)){
+
+        $newcart[$id]=[
+            'name'=>$product->name,
+            'image'=>$product->image,
+            'price'=>$product->price,
+            'quantity'=>1,
+            'sub_total'=>$product->price*1
+        ];
+
+        session()->put('cart',$newcart);
+    }else{
+        if(array_key_exists($id,$cart)){
+            $cart[$id]['quantity']=$cart[$id]['quantity']+1;
+            $cart[$id]['sub_total']=$cart[$id]['quantity']=$cart[$id]['price'];
+            session()->put('cart',$cart);
+        }else{
+            $cart[$id]=[
+                'name'=>$product->name,
+                'image'=>$product->image,
+                'price'=>$product->price,
+                'quantity'=>1,
+                'sub_total'=>$product->price*1,
+
+            ];
+
+            session()->put('cart',$cart);
+        }
+    }
+   
+    return redirect()->back()->with('msg','Product added to crat.');
+
+ }
+
+  public function cartview(){
+    $mycart=session()->get('cart');
+    return view('frontend.pages.cart',compact('mycart'));
+  }
+
+  public function cartitemremove($id){
+        $cart=session()->get('cart');
+        unset($cart[$id]);
+        session()->put('cart',$cart);
+        return redirect()->back();
+  }
+
+  public function cartclear(){
+    session()->forget('cart');
+    return redirect()->back();
+
+    }
 }

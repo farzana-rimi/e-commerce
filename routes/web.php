@@ -11,9 +11,6 @@ use App\Http\Controllers\Backend\VendorController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\PermissionController;
-
-
-
 use Illuminate\Support\Facades\Route;
 
 //website routes
@@ -24,6 +21,11 @@ Route::get('/weblogout',[WebsiteController::class,'weblogout'])->name('weblogout
 Route::get('/product-search',[WebsiteController::class,'productsearch'])->name('product.search');
 Route::get('/email-verify/{id}',[WebsiteController::class,'emailVerify'])->name('email.verify');
 Route::get('/email-verify-link/{id}',[WebsiteController::class,'emailverifylink'])->name('email.verify.link');
+Route::get('/add-to-cart/{id}',[WebsiteController::class,'addtocart'])->name('add.to.cart');
+Route::get('/cart-view',[WebsiteController::class,'cartview'])->name('cart.view');
+Route::get('/cart-clear',[WebsiteController::class,'cartclear'])->name('cart.clear');
+Route::get('/cart-item-remove/{id}',[WebsiteController::class,'cartitemremove'])->name('cart.item.remove');
+
 
 
 
