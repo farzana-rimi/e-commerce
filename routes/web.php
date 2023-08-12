@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Route;
 //website routes
 Route::get('/',[WebsiteController::class,'webhome'])->name('website');
 Route::post('/reg-store',[WebsiteController::class,'regstore'])->name('regstore');
-Route::post('/web-login',[WebsiteController::class,'weblogin'])->name('weblogin');
-Route::get('/weblogout',[WebsiteController::class,'weblogout'])->name('weblogout');
+Route::get('/web-login',[WebsiteController::class,'weblogin'])->name('web.login');
+
+Route::post('/login-store',[WebsiteController::class,'loginstore'])->name('login.store');
+// Route::get('/weblogout',[WebsiteController::class,'weblogout'])->name('weblogout');
 Route::get('/product-search',[WebsiteController::class,'productsearch'])->name('product.search');
 Route::get('/email-verify/{id}',[WebsiteController::class,'emailVerify'])->name('email.verify');
 Route::get('/email-verify-link/{id}',[WebsiteController::class,'emailverifylink'])->name('email.verify.link');
@@ -25,6 +27,13 @@ Route::get('/add-to-cart/{id}',[WebsiteController::class,'addtocart'])->name('ad
 Route::get('/cart-view',[WebsiteController::class,'cartview'])->name('cart.view');
 Route::get('/cart-clear',[WebsiteController::class,'cartclear'])->name('cart.clear');
 Route::get('/cart-item-remove/{id}',[WebsiteController::class,'cartitemremove'])->name('cart.item.remove');
+
+//for cheackout
+Route::group(['middleware'=>'frontendAuth'],function(){
+    Route::get('/checkout',[WebsiteController::class,'checkout'])->name('checkout');
+    Route::post('/order',[WebsiteController::class,'order'])->name('order');
+    Route::get('/weblogout',[WebsiteController::class,'weblogout'])->name('weblogout');
+});
 
 
 
@@ -83,17 +92,18 @@ Route::group(['prefix'=>'admin'],function(){
 
             //for vendor
             
-            Route::get('/vendor/list',[VendorController::class,'list'])->name('vendor.list');
-            Route::get('/vendor/form',[VendorController::class,'form'])->name('vendor.form');
-            Route::post('/vendor/store',[VendorController::class,'store'])->name('vendor.store');
+          
 
             //for admin
             Route::get('/admin/list',[UserController::class,'adminlist'])->name('admin.list');
             Route::get('/admin/form',[UserController::class,'adminform'])->name('admin.form');
             Route::post('/admin/store',[UserController::class,'adminstore'])->name('admin.store');
+            
 
             //for customer
             Route::get('/customer/list',[UserController::class,'customerlist'])->name('customer.list');
+
+
             //for role
             Route::get('/role/list',[RoleController::class,'list'])->name('role.list');
             Route::get('/role/form',[RoleController::class,'form'])->name('role.form');
@@ -103,7 +113,9 @@ Route::group(['prefix'=>'admin'],function(){
             Route::get('/role/edit/{id}',[RoleController::class,'edit'])->name('role.edit');
             Route::put('/role/update/{id}',[RoleController::class,'update'])->name('role.update');
             Route::get('/role/permission/{roleid}',[RoleController::class,'assign'])->name('role.permission');
-            Route::post('/assign/store/{roleid}',[RoleController::class,'assignstore'])->name('assign.store'); 
+            Route::post('/assign/store/{roleid}',[RoleController::class,'assignstore'])->name('assign.store');
+            
+            
             //for permission
            Route::get('/permission/list',[PermissionController::class,'list'])->name('permission.list');
            Route::get('/get/permissions', [PermissionController::class, 'getpermission'])->name('get.permission');

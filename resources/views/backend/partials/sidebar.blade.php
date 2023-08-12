@@ -14,10 +14,7 @@
                                Customer
                             </a>
 
-                            <a class="nav-link" href="{{route('vendor.list')}}">
-                                <div class="sb-nav-link-icon"><i class="fa-light fa-location-dot"></i></div>
-                                Vendor
-                            </a>
+                           
                             <a class="nav-link" href="{{route('product.list')}}">
                                 <div class="sb-nav-link-icon"><i class="fa-light fa-location-dot"></i></div>
                                 Product

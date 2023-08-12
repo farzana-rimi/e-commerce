@@ -5,14 +5,20 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Mail\EmailVerification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Orderdetail;
+use App\Models\Order;
+use Illuminate\Contracts\Session\Session;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 
+
+
 use Illuminate\Http\Request;
+use Throwable;
 
 class WebsiteController extends Controller
 {
@@ -23,10 +29,7 @@ class WebsiteController extends Controller
         return view('frontend.pages.webhome',compact('categories','products'));
     }
 
-  
-
-
-
+   
     public function regstore(Request $request)
     {
       $validate=Validator::make($request->all(),[
@@ -53,152 +56,234 @@ class WebsiteController extends Controller
           'password'=>bcrypt($request->password),
           'contact'=>$request->contact,
           'address'=>$request->address,
-          'type'=>'customer',
           'status'=>'active'
+         
       ]);
 
       toastr()->success('Registration success.');
       return redirect()->back();
     }
 
-   
-    public function weblogin(Request $request)
+    public function weblogin(){
+        return view('frontend.pages.weblogin');
+    }
+
+    public function loginstore(Request $request)
     {
         $validate=Validator::make($request->all(),[
            'email'=>'required',
            'password'=>'required'
         ]);
-
         if($validate->fails())
-        {
-            toastr()->error($validate->getMessageBag());
-            return redirect()->back();
-        }
-
-        $credentials=$request->except('_token');
-
-       if(auth()->attempt($credentials))
-       {
         
-            if(auth()->user()->email_varified_at!=null)
-                {
-                    toastr()->success('Login success');
-                    return redirect()->route('website')();
-                }
-                $user_id=auth()->user()->id;
+           {
+               toastr()->error($validate->getMessageBag());
+               return redirect()->back();
+           }
+           $credentials=$request->except('_token');
 
-                Auth::logout();
+           if(auth()->guard('user')->attempt($credentials))
+           {
+            //    if(auth()->user()->email_varified_at!=null)
+                    {
+                      toastr()->success('Login success');
+                      return redirect()->route('website');
+                     }
+                    //  $user_id=auth()->user()->id;
+  
+                    //  Auth::logout();
+  
+                    // toastr()->warning('Email not verified');
+                    // return redirect()->back()->with('userId',$user_id);
+          }
+          toastr()->error('Invalid Credentials');
+          return redirect()->back();
+      }
 
-                toastr()->warning('Email not verified');
-                return redirect()->back()->with('userId',$user_id);
-        }
-        toastr()->error('Invalid Credentials');
-        return redirect()->back();
-    }
+      public function emailVerify($id){
+          $user=User::find($id);
+          $link=route('email.verify.link',$user->id);
+      
+          Mail::to($user->email)->send(new EmailVerification($link));
+      
+           $user->update([
+              'expired_at'=>Carbon::now()->addMinute(5)
+           ]);
+          toastr()->success('Verification link sent to your email.');
+          return redirect()->back();
+      }
 
+     
 
-
-public function emailVerify($id){
-    $user=User::find($id);
-    $link=route('email.verify.link',$user->id);
-
-    Mail::to($user->email)->send(new EmailVerification($link));
-
-     $user->update([
-        'expired_at'=>Carbon::now()->addMinute(5)
-     ]);
-    toastr()->success('Verification link sent to your email.');
-    return redirect()->back();
-}
-
-public function emailverifylink($id){
-    $user=User::find($id);
-    if($user->expired_at > Carbon::now())
-    {
-        $user->update([
-            'email_verified_at'=>now()
-        ]);
-
-        toastr()->success('Email verification success. Please login.');
+      public function emailverifylink($id){
+          $user=User::find($id);
+          if($user->expired_at > Carbon::now())
+          {
+              $user->update([
+                  'email_verified_at'=>now()
+              ]);
+              toastr()->success('Email verification success. Please login.');
+              return redirect()->route('website');
+      
+          }
+        
+         toastr()->warning('Link expired');
         return redirect()->route('website');
-    }
+      }
 
-    toastr()->warning('Link expired');
-    return redirect()->route('website');
+      public function weblogout(){
+          auth()->logout();
+          toastr()->warning('Loged out');
+          return redirect()->back();
+      
+       }
 
-}
-
-
-
-public function weblogout(){
-    auth()->logout();
-    toastr()->warning('Loged out');
-    return redirect()->back();
-
- }
-
- public function productsearch(Request $request){
-
-    $products=Product::where('name','LIKE','%'.$request->search_key.'%')->get();
-
-    return view('frontend.pages.productsearch',compact('products'));
-
-    
- }
-
- public function addtocart($id){
-
-    $cart=session()->get('cart');
-    $product=Product::find($id);
-    if(empty($cart)){
-
-        $newcart[$id]=[
-            'name'=>$product->name,
-            'image'=>$product->image,
-            'price'=>$product->price,
-            'quantity'=>1,
-            'sub_total'=>$product->price*1
-        ];
-
-        session()->put('cart',$newcart);
-    }else{
-        if(array_key_exists($id,$cart)){
-            $cart[$id]['quantity']=$cart[$id]['quantity']+1;
-            $cart[$id]['sub_total']=$cart[$id]['quantity']=$cart[$id]['price'];
-            session()->put('cart',$cart);
-        }else{
-            $cart[$id]=[
-                'name'=>$product->name,
-                'image'=>$product->image,
-                'price'=>$product->price,
-                'quantity'=>1,
-                'sub_total'=>$product->price*1,
-
-            ];
-
-            session()->put('cart',$cart);
+       public function productsearch(Request $request){
+      
+          $products=Product::where('name','LIKE','%'.$request->search_key.'%')->get();
+      
+          return view('frontend.pages.productsearch',compact('products'));
+      
+          
+       }
+       
+       
+        public function addtocart($id){
+       
+           $cart=session()->get('cart');
+           $product=Product::find($id);
+           if(empty($cart)){
+       
+               $newcart[$id]=[
+                   'name'=>$product->name,
+                   'image'=>$product->image,
+                   'price'=>$product->price,
+                   'quantity'=>1,
+                   'sub_total'=>$product->price*1
+               ];
+       
+               session()->put('cart',$newcart);
+       
+           }else{
+               if(array_key_exists($id,$cart)){
+                   $cart[$id]['quantity']=$cart[$id]['quantity']+1;
+                   $cart[$id]['sub_total']=$cart[$id]['quantity']=$cart[$id]['price'];
+                   session()->put('cart',$cart);
+               }else{
+                   $cart[$id]=[
+                       'name'=>$product->name,
+                       'image'=>$product->image,
+                       'price'=>$product->price,
+                       'quantity'=>1,
+                       'sub_total'=>$product->price*1,
+       
+                   ];
+       
+                   session()->put('cart',$cart);
+               }
+           }
+          
+           return redirect()->back()->with('msg','Product added to crat.');
+       
         }
-    }
-   
-    return redirect()->back()->with('msg','Product added to crat.');
+        
+        
+          public function cartview(){
+            $mycart=session()->get('cart');
+            return view('frontend.pages.cart',compact('mycart'));
+          }
+        
+          public function cartitemremove($id){
+                $cart=session()->get('cart');
+                unset($cart[$id]);
+                session()->put('cart',$cart);
+                return redirect()->back();
+          }
+        
+          public function cartclear(){
+            session()->forget('cart');
+            return redirect()->back();
+        
+            }
+        
+          public function checkout(){
+            return view('frontend.pages.checkout');
+          }
 
- }
 
-  public function cartview(){
-    $mycart=session()->get('cart');
-    return view('frontend.pages.cart',compact('mycart'));
-  }
+        public function order(Request $request){
 
-  public function cartitemremove($id){
-        $cart=session()->get('cart');
-        unset($cart[$id]);
-        session()->put('cart',$cart);
-        return redirect()->back();
-  }
+            $mycart=session()->get('cart');
 
-  public function cartclear(){
-    session()->forget('cart');
-    return redirect()->back();
+                try{
 
-    }
+                    DB::beginTransaction();
+                    //crate order first
+
+                    $order=Order::create([
+                        'user_id'=>auth('user')->user()->id,
+                        'name'=>$request->first_name .' '. $request->last_name,
+                        'email'=>$request->email,
+                        'address'=>$request->address,
+                        'payment_method'=>$request->paymentMethod,
+                        'total'=>array_sum(array_column($mycart,'sub_total')),
+                    ]);
+
+                    //order details create
+                    foreach($mycart as $key=>$cart)
+
+                        {
+                            Orderdetail::create([
+                                'order_id'=>$order->id,
+                                'product_id'=>$key,
+                                'price'=>$cart['price'],
+                                'qty'=>$cart['quantity'],
+                                'subtotal'=>$cart['sub_total']
+
+                            ]);
+                        }
+
+                    DB::commit();
+                    return redirect()->back()->with('msg','Order place success.');
+                }catch(Throwable $e)
+                    {
+                        DB::rollBack();
+                        return redirect()->back()->with('msg','Something went wrong');
+
+                    }
+
+        }
+
+
 }
+
+          
+        
+   
+  
+
+
+          
+        
+
+
+
+       
+
+
+       
+      
+        
+
+
+
+        
+        
+
+  
+   
+
+
+
+
+

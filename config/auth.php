@@ -40,10 +40,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'vendor' => [
+
+        'user' => [
             'driver' => 'session',
-            'provider' => 'vendors',
+            'provider' => 'users',
         ],
+       
+
     ],
 
     /*
@@ -68,11 +71,8 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'vendors' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Vendor::class,
-        ],
-
+      
+    
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -106,6 +106,7 @@ return [
             'throttle' => 60,
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------

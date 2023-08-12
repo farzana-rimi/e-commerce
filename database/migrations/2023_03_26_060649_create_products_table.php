@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('description');
             $table->foreignId('brand_id');
             $table->foreignId('category_id');
-            $table->foreignId('vendor_id');
+            
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@
       <th scope="col">Description</th>
       <th scope="col">Brand</th>
       <th scope="col">Category</th>
-      <th scope="col">Vendor</th>
+      
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -32,7 +32,7 @@
       <td>{{$data->description}}</td>
       <td>{{$data->brand?->name}}</td>
       <td>{{$data->category?->name}}</td>
-      <td>{{$data->vendor?->name}}</td>
+      
       <td>
         <a href="{{route('product.view',$data->id)}}" class="btn btn-info">View</a>
         <a href="{{route('product.delete',$data->id)}}" class="btn btn-danger">Delete</a>

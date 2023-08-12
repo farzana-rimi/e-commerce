@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 class EmailVerification extends Mailable
 {
     use Queueable, SerializesModels;
-    public $varificationlink;
+    public $verificationlink;
     /**
      * Create a new message instance.
      */

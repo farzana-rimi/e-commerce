@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
-use App\Models\Vendor;
+
 
 class ProductController extends Controller
 {
     public function list()
     {
-        $products=Product::with('category','brand','vendor')->paginate('2');
+        $products=Product::with('category','brand')->paginate('2');
         return view('backend.pages.product.list',compact('products'));
     }
 
@@ -22,8 +22,8 @@ class ProductController extends Controller
     {
         $categories=Category::all();
         $brands=Brand::all();
-        $vendors=Vendor::all();
-        return view('backend.pages.product.form',compact('categories','brands','vendors'));
+       
+        return view('backend.pages.product.form',compact('categories','brands'));
     }
 
 
@@ -42,7 +42,7 @@ class ProductController extends Controller
             'image'=>$fileName,
             'brand_id'=>$request-> brand_id,
             'category_id'=>$request-> category_id,
-            'vendor_id'=>$request->vendor_id,
+            
             'status'=>$request->status,
             'description'=>$request->description
 

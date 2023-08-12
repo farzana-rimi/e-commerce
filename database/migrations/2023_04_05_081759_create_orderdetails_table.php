@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('orderdetails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id');
-            $table->foreignId('order_id');
-            $table->string('delivery')->default('done');
-            $table->string('payment_method');
+            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->restrictOnDelete();
+            $table->double('price',10,2);
+            $table->integer('quantity');
+            $table->double('subtotal',10,2);
             $table->timestamps();
         });
     }

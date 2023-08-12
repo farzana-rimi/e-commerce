@@ -124,7 +124,7 @@
 @guest
 <li> <a href="#"  data-toggle="modal" data-target="#exampleModal">Register</a></li>
 
-<li> <a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
+<li> <a href="{{(route('web.login'))}}"  >Login</a></li>
 @endguest
 
 @auth
@@ -229,44 +229,5 @@
     </div>
 
 
-  <!-- login Modal -->
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title " id="exampleModalLabel">Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{{route('weblogin')}}" method='post'>
-                    
-                    @csrf
-                    <div class="modal-body mb-5">
-
-                        <div class="form-group">
-                            <label for="">Enter Your email:</label>
-                            <input required type="email" name="email" class="form-control" placeholder="email">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="">Enter Your password:</label>
-                            <input required type="password" name="password" class="form-control" placeholder="password">
-                        </div>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-
-   
    
 

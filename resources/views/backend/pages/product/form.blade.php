@@ -45,15 +45,7 @@
                     
                 </div>
 
-                <div>
-                    <label for="">Select Vendor</label>
-                    <select name="vendor_id" id="" class='form-control'>
-                        @foreach($vendors as $data)
-                        <option value="{{$data->id}}">{{$data->name}}</option>
-                        @endforeach
-                    </select>
-                    
-                </div>
+         
                <div>
                     <label for="">Select Category</label>
                     <select name="category_id" id="" class='form-control'>
