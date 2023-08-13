@@ -260,7 +260,7 @@ class WebsiteController extends Controller
         }
 
         public function profile(){
-            $user=User::all();
+            $user=User::where('id',auth('user')->user()->id)->get();
             return view('frontend.pages.userprofile',compact('user'));
         }
 
