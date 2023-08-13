@@ -121,18 +121,20 @@
 
 <li><a href="contact.html">Contact Us</a></li>
   <!-- Button trigger modal -->
-@guest
-<li> <a href="#"  data-toggle="modal" data-target="#exampleModal">Register</a></li>
 
-<li> <a href="{{(route('web.login'))}}"  >Login</a></li>
-@endguest
 
-@auth
+@if(auth('user')->user())
+
 <li> <a href="{{route('weblogout')}}" >Logout</a></li>
-
-@endauth
+<li><a href="{{route('cart.view')}}">Cart ( {{session()->has('cart')?count(session()->get('cart')):0}} items)</a></li>
+<li> <a href="{{route('profile')}}">{{auth('user')->user()->full_name}}</a></li>
+@else
 <li><a href="#">+8801620163363</a></li>
-<li><a href="{{route('cart.view')}}">Cart ( {{session()->has('cart')?count(session()->get('cart')):0}} items)</a>   </li>
+<li> <a href="#"  data-toggle="modal" data-target="#exampleModal">Register</a></li>
+<li> <a href="{{(route('web.login'))}}"  >Login</a></li>
+   
+@endif
+
 
 
 </ul>

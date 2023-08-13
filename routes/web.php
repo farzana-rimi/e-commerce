@@ -30,6 +30,7 @@ Route::get('/cart-item-remove/{id}',[WebsiteController::class,'cartitemremove'])
 
 //for cheackout
 Route::group(['middleware'=>'frontendAuth'],function(){
+    Route::get('/user-profile',[WebsiteController::class,'profile'])->name('profile');
     Route::get('/checkout',[WebsiteController::class,'checkout'])->name('checkout');
     Route::post('/order',[WebsiteController::class,'order'])->name('order');
     Route::get('/weblogout',[WebsiteController::class,'weblogout'])->name('weblogout');

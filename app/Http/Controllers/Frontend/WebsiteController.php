@@ -183,7 +183,10 @@ class WebsiteController extends Controller
                }
            }
           
-           return redirect()->back()->with('msg','Product added to crat.');
+          
+
+           toastr()->success('Product Added to Cart');
+           return redirect()->back();
        
         }
         
@@ -244,14 +247,21 @@ class WebsiteController extends Controller
                         }
 
                     DB::commit();
-                    return redirect()->back()->with('msg','Order place success.');
+                    toastr()->success('Order Placed');
+                    return redirect()->back();
                 }catch(Throwable $e)
                     {
                         DB::rollBack();
-                        return redirect()->back()->with('msg','Something went wrong');
+                        toastr()->error('Something went wrong');
+                        return redirect()->back();
 
                     }
 
+        }
+
+        public function profile(){
+            $user=User::all();
+            return view('frontend.pages.userprofile',compact('user'));
         }
 
 
